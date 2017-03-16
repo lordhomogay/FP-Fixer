@@ -5,7 +5,6 @@
 // @description     Provides various changes to facepunch.com
 // @match           facepunch.com/*
 // @match           www.facepunch.com/*
-// @grant           none
 // ==/UserScript==
 
 if (!localStorage.fpfInit) {
@@ -35,7 +34,7 @@ $.ajax({
 	}
 });
 
-$("#navbarlinks").append("<span id='fpfOptions' class='navbarlink fakeLink' style='float:right; padding-right:1em'><img src='/fp/ratings/information.png' />FPF Options</span>");
+$("#navbarlinks").append("<span id='fpfOptions' class='navbarlink fakeLink' style='float:left; padding-right:1em'><img src='/fp/ratings/information.png' />FPF Options</span>");
 $("#fpfOptions").click(function(){
 	CreateFloatingDiv(MouseX, MouseY, "fpfOptionsMenu", "urlBox");
 	fpfOptionsMenu.innerHTML = html;
