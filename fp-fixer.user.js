@@ -104,7 +104,7 @@ else if (currentPage.indexOf("/members/") >= 0){	//for some reason fp uses two s
 	window.location.href=currentPage.replace("members/", "member.php?u=");
 }
 
-else if (currentPage.indexOf("forum.php") >= 0 || currentPage == ("https://facepunch.com/") ){	//double column forumhome -- made by reagy (https://facepunch.com/member.php?u=44687)
+else if (currentPage.indexOf("forum.php") >= 0 || currentPage == ("https://facepunch.com/") ){
 //Code posted by Baboo00 -- https://goo.gl/mSlBfW
 	$(".forums").first().next().nextAll().appendTo($("<td valign='top' class='FrontPageForums'></td>").insertAfter(".FrontPageForums"));
 	$(".FrontPageForums").css("padding", "5px");
@@ -112,11 +112,23 @@ else if (currentPage.indexOf("forum.php") >= 0 || currentPage == ("https://facep
     $(".last_post_column").css("min-width", "200px");
 }
 
-
+/*
 $("#navbarlinks").append("<span id='fpfOptions' class='navbarlink fakeLink' style='float:left; padding-right:1em'><img src='/fp/ratings/information.png' />FPF Options</span>");	//options menu
 $("#fpfOptions").click(function(){
 	CreateFloatingDiv(MouseX, MouseY, "fpfOptionsMenu", "urlBox");
 	fpfOptionsMenu.innerHTML = "";
+});
+*/
+
+$.ajax({
+	url: 'https://rawgit.com/lordhomogay/FP-Fixer/feature-test/options.html',
+	success: function(data) {
+		$("#navbarlinks").append("<span id='fpfOptions' class='navbarlink fakeLink' style='float:left; padding-right:1em'><img src='/fp/ratings/information.png' />FPF Options</span>");
+		$("#fpfOptions").click(function(){
+			CreateFloatingDiv(MouseX, MouseY, "fpfOptionsMenu", "urlBox");
+			fpfOptionsMenu.innerHTML = data;
+		});
+	}
 });
 
 $(".fakeLink").css("cursor", "pointer");
