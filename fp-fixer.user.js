@@ -8,6 +8,7 @@
 // @grant           none
 // ==/UserScript==
 
+
 $("#navbarlinks").prepend("<div class='navbarlink'><a href='/fp_ticker.php'><img src='/fp/navbar/ticker.png'/>Ticker</a></div>");
 $("#logo").children().children().attr("src", "https://i.imgur.com/CX9h2Dv.png");
 
@@ -40,15 +41,15 @@ if (currentPage.indexOf("showthread.php") >= 0){
 			greenPosts++;
 		}
 		else if (usergroup.html().indexOf("#A06000") >= 0){					//gold member
-//			$(this).find(".postdetails, .postfoot").css("background", "rgba(255, 239, 153, 0.7)");
+		//$(this).find(".postdetails, .postfoot").css("background", "rgba(255, 239, 153, 0.7)");
 			goldPosts++;
 		}
 		else if (usergroup.html().indexOf("color=\"red\"") >= 0){			//red member
-//			$(this).find(".postdetails, .postfoot").css("background", "rgba(246, 201, 204, 0.7)");
+		//$(this).find(".postdetails, .postfoot").css("background", "rgba(246, 201, 204, 0.7)");
 			redPosts++;
 		}
 		else {																//none of the above, either a usergroup i forgot or a blue member
-//			$(this).find(".postdetails, .postfoot").css("background", "rgba(255, 255, 255, 0.6)");
+		//$(this).find(".postdetails, .postfoot").css("background", "rgba(255, 255, 255, 0.6)");
 			bluePosts++;
 		}
 
@@ -83,6 +84,15 @@ if (currentPage.indexOf("showthread.php") >= 0){
 	$(".postbitignored").each(function(){
 		$(this).fadeTo(0, 0.15);
 	});
+
+	//Resize user titles -- Code by luastoned (https://facepunch.com/member.php?u=118944)
+	var userTitles = document.getElementsByClassName("usertitle");
+	for (var i = 0; i < userTitles.length; i++){
+		userTitles[i].style.fontSize = "10px";
+		var fontTags = userTitles[i].getElementsByTagName("font");
+		for (var j = 0; j < fontTags.length; j++)
+			fontTags[j].setAttribute("size", 1);    
+	}
 }
 
 
@@ -102,13 +112,12 @@ else if (currentPage.indexOf("forum.php") >= 0 || currentPage == ("https://facep
     $(".last_post_column").css("min-width", "200px");
 }
 
-//Resize user titles -- Code by luastoned (https://facepunch.com/member.php?u=118944)
-var userTitles = document.getElementsByClassName("usertitle");
-for (var i = 0; i < userTitles.length; i++){
-	userTitles[i].style.fontSize = "10px";
-	var fontTags = userTitles[i].getElementsByTagName("font");
-	for (var j = 0; j < fontTags.length; j++)
-		fontTags[j].setAttribute("size", 1);    }
+
+$("#navbarlinks").append("<span id='fpfOptions' class='navbarlink fakeLink' style='float:left; padding-right:1em'><img src='/fp/ratings/information.png' />FPF Options</span>");	//options menu
+$("#fpfOptions").click(function(){
+	CreateFloatingDiv(MouseX, MouseY, "fpfOptionsMenu", "urlBox");
+	fpfOptionsMenu.innerHTML = "";
+});
 
 $(".fakeLink").css("cursor", "pointer");
 console.info("FP Fixer completed successfully");
