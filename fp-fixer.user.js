@@ -36,8 +36,39 @@ $.ajax({
 
 $("#navbarlinks").append("<span id='fpfOptions' class='navbarlink fakeLink' style='float:left; padding-right:1em'><img src='/fp/ratings/information.png' />FPF Options</span>");
 $("#fpfOptions").click(function(){
+		function toggle(setting){
+		if (localStorage.getItem(setting)  === "true")
+			localStorage.setItem(setting, "false");
+		else if (localStorage.getItem(setting)  === "false")
+			localStorage.setItem(setting, "true");
+	}
 	CreateFloatingDiv(MouseX, MouseY, "fpfOptionsMenu", "urlBox");
 	fpfOptionsMenu.innerHTML = html;
+	$("#fpfNavbar").append(localStorage.fpfNavbar);
+		$("#fpfNavbar").click(function(){ toggle("fpfNavbar"); });
+	$("#fpfLogo").append(localStorage.fpfLogo);
+		$("#fpfLogo").click(function(){ toggle("fpfLogo"); });
+	$("#fpfLogoutButton").append(localStorage.fpfLogoutButton);
+		$("#fpfLogoutButton").click(function(){ toggle("fpfLogoutButton"); });
+	$("#fpfNotablePosts").append(localStorage.fpfNotablePosts);
+		$("#fpfNotablePosts").click(function(){ toggle("fpfNotablePosts"); });
+	$("#fpfIgnoreLink").append(localStorage.fpfIgnoreLink);
+		$("#fpfIgnoreLink").click(function(){ toggle("fpfIgnoreLink"); });
+	$("#fpfThreadTitleHighlight").append(localStorage.fpfThreadTitleHighlight);
+		$("#fpfThreadTitleHighlight").click(function(){ toggle("fpfThreadTitleHighlight"); });
+	$("#fpfFadeIgnored").append(localStorage.fpfFadeIgnored);
+		$("#fpfFadeIgnored").click(function(){ toggle("fpfFadeIgnored"); });
+	$("#fpfResizeUserTitles").append(localStorage.fpfResizeUserTitles);
+		$("#fpfResizeUserTitles").click(function(){ toggle("fpfResizeUserTitles"); });
+	$("#fpfProfileMessageDeleted").append(localStorage.fpfProfileMessageDeleted);
+		$("#fpfProfileMessageDeleted").click(function(){ toggle("fpfProfileMessageDeleted"); });
+	$("#fpfDoubleColumn").append(localStorage.fpfDoubleColumn);
+		$("#fpfDoubleColumn").click(function(){ toggle("fpfDoubleColumn"); });
+	$("#fpfHighlightLast").append(localStorage.fpfHighlightLast);
+		$("#fpfHighlightLast").click(function(){ toggle("fpfHighlightLast"); });
+	$("span:contains('true')").css("background-color", "rgb(110, 255, 112");
+	$("span:contains('false')").css("background-color", "rgb(246, 201, 204");
+	$(".fakeLink").css("cursor", "pointer");
 });
 
 if (localStorage.fpfNavbar == "true")
@@ -51,7 +82,7 @@ if(SECURITYTOKEN != "guest" && localStorage.fpfLogoutButton == "true")
 
 if (currentPage.indexOf("showthread.php") >= 0){
 	var	username = $("#navbar-login").find("strong").text();
-	
+
 	$("#posts li").each(function(){	//puts an ignore link in the postbit, highlights notable usergroups
 		usergroup = $(this).find("a.username");
 		if (localStorage.fpfNotablePosts == "true"){
@@ -71,14 +102,14 @@ if (currentPage.indexOf("showthread.php") >= 0){
 			if (usergroup.html().indexOf(username) >= 0)
 				$(this).find(".postdetails, .postfoot").css("background", "rgba(238, 255, 188, 1.0)");
 		}
-		
+
 		if (localStorage.fpfIgnoreLink == "true" && usergroup.html().indexOf(username) == -1){
 			posterid = $(this).find("a.username").attr("href");
 			posterid = posterid.replace("member.php?u=", "");
 			$(this).find(".postlinking").append("<a href='profile.php?do=addlist&userlist=ignore&u="+posterid+"' target='_blank'><img src='https://i.imgur.com/RaoUuug.png'/ title='Ignore User'></a>");
 		}
 	});
-	
+
 	if (localStorage.fpfThreadTitleHighlight == "true")
 		$("#lastelement").css({ "color": "#FF0000", "font-weight": "bold" });	//makes thread titles glowy and red
 
@@ -97,9 +128,9 @@ if (currentPage.indexOf("showthread.php") >= 0){
 			userTitles[i].style.fontSize = "10px";
 			var fontTags = userTitles[i].getElementsByTagName("font");
 			for (var j = 0; j < fontTags.length; j++)
-				fontTags[j].setAttribute("size", 1);    
+				fontTags[j].setAttribute("size", 1);
 		}
-	}	
+	}
 }
 
 else if (currentPage.indexOf("member.php") >= 0 && localStorage.fpfProfileMessageDeleted == "true"){	//code found on a post from Teddybeer
