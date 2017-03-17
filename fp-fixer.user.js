@@ -34,16 +34,25 @@ $.ajax({
 	}
 });
 
+function toggle(setting){
+if (localStorage.getItem(setting)  === "true"){
+	html = $("#"+setting).html();
+	html = html.replace("true", "false");
+	$("#"+setting).html(html);
+	$("#"+setting).css("background-color", "rgb(246, 201, 204)");
+	localStorage.setItem(setting, "false");	}
+else if (localStorage.getItem(setting)  === "false"){
+	html = $("#"+setting).html();
+	html = html.replace("false", "true");
+	$("#"+setting).html(html);
+	localStorage.setItem(setting, "true");
+	$("#"+setting).css("background-color", "rgb(110, 255, 122)");	}
+}
+
 $("#navbarlinks").append("<span id='fpfOptions' class='navbarlink fakeLink' style='float:left; padding-right:1em'><img src='/fp/ratings/information.png' />FPF Options</span>");
 $("#fpfOptions").click(function(){
-		function toggle(setting){
-		if (localStorage.getItem(setting)  === "true")
-			localStorage.setItem(setting, "false");
-		else if (localStorage.getItem(setting)  === "false")
-			localStorage.setItem(setting, "true");
-	}
 	CreateFloatingDiv(MouseX, MouseY, "fpfOptionsMenu", "urlBox");
-	fpfOptionsMenu.innerHTML = html;
+	fpfOptionsMenu.innerHTML = html;	//holy fuck i know this is ugly
 	$("#fpfNavbar").append(localStorage.fpfNavbar);
 		$("#fpfNavbar").click(function(){ toggle("fpfNavbar"); });
 	$("#fpfLogo").append(localStorage.fpfLogo);
@@ -66,9 +75,8 @@ $("#fpfOptions").click(function(){
 		$("#fpfDoubleColumn").click(function(){ toggle("fpfDoubleColumn"); });
 	$("#fpfHighlightLast").append(localStorage.fpfHighlightLast);
 		$("#fpfHighlightLast").click(function(){ toggle("fpfHighlightLast"); });
-	$("span:contains('true')").css("background-color", "rgb(110, 255, 112");
-	$("span:contains('false')").css("background-color", "rgb(246, 201, 204");
-	$(".fakeLink").css("cursor", "pointer");
+	$("#fpfOptionsMenu").children(":contains('true')").css("background-color", "rgb(110, 255, 112");
+	$("#fpfOptionsMenu").children(":contains('false')").css("background-color", "rgb(246, 201, 204");
 });
 
 if (localStorage.fpfNavbar == "true")
