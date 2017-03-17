@@ -6,6 +6,9 @@
 // @match           facepunch.com/*
 // @match           www.facepunch.com/*
 // ==/UserScript==
+/*	to do:
+scrape ignored users and block their threads from appearing
+*/
 
 if (!localStorage.fpfInit) {
 	localStorage.setItem("fpfInit", "true");
@@ -36,15 +39,15 @@ $.ajax({
 
 function toggle(setting){
 if (localStorage.getItem(setting)  === "true"){
-	html = $("#"+setting).html();
-	html = html.replace("true", "false");
-	$("#"+setting).html(html);
+	temphtml = $("#"+setting).html();
+	temphtml = temphtml.replace("true", "false");
+	$("#"+setting).html(temphtml);
 	$("#"+setting).css("background-color", "rgb(246, 201, 204)");
 	localStorage.setItem(setting, "false");	}
 else if (localStorage.getItem(setting)  === "false"){
-	html = $("#"+setting).html();
-	html = html.replace("false", "true");
-	$("#"+setting).html(html);
+	temphtml = $("#"+setting).html();
+	temphtml = temphtml.replace("false", "true");
+	$("#"+setting).html(temphtml);
 	localStorage.setItem(setting, "true");
 	$("#"+setting).css("background-color", "rgb(110, 255, 122)");	}
 }
