@@ -37,12 +37,10 @@ $.ajax({
 $("#navbarlinks").append("<span id='fpfOptions' class='navbarlink fakeLink' style='float:left; padding-right:1em'><img src='/fp/ratings/information.png' />FPF Options</span>");
 $("#fpfOptions").click(function(){
 		function toggle(setting){
-		if (localStorage.getItem(setting)  === "true"){
+		if (localStorage.getItem(setting)  === "true")
 			localStorage.setItem(setting, "false");
-		}
-		else if (localStorage.getItem(setting)  === "false"){
+		else if (localStorage.getItem(setting)  === "false")
 			localStorage.setItem(setting, "true");
-		}
 	}
 	CreateFloatingDiv(MouseX, MouseY, "fpfOptionsMenu", "urlBox");
 	fpfOptionsMenu.innerHTML = html;
@@ -68,18 +66,18 @@ $("#fpfOptions").click(function(){
 		$("#fpfDoubleColumn").click(function(){ toggle("fpfDoubleColumn"); });
 	$("#fpfHighlightLast").append(localStorage.fpfHighlightLast);
 		$("#fpfHighlightLast").click(function(){ toggle("fpfHighlightLast"); });
-	$("#fpfOptionsMenu").children(":contains('true')").css("background-color", "rgb(110, 255, 112");
-	$("#fpfOptionsMenu").children(":contains('false')").css("background-color", "rgb(246, 201, 204");
+	$("span:contains('true')").css("background-color", "rgb(110, 255, 112");
+	$("span:contains('false')").css("background-color", "rgb(246, 201, 204");
 	$(".fakeLink").css("cursor", "pointer");
 });
 
-if (localStorage.fpfNavbar === "true")
+if (localStorage.fpfNavbar == "true")
 	$("#navbarlinks").prepend("<div class='navbarlink'><a href='/fp_ticker.php'><img src='/fp/navbar/ticker.png'/>Ticker</a></div>");
 
-if (localStorage.fpfLogo === "true")
+if (localStorage.fpfLogo == "true")
 	$("#logo").children().children().attr("src", "https://cdn.rawgit.com/lordhomogay/FP-Fixer/feature-test/fplogo.png");
 
-if(SECURITYTOKEN != "guest" && localStorage.fpfLogoutButton === "true")
+if(SECURITYTOKEN != "guest" && localStorage.fpfLogoutButton == "true")
 	$(".footer_links").prepend("<a href='login.php?do=logout&logouthash="+SECURITYTOKEN+"'>Logout</a> - ");
 
 if (currentPage.indexOf("showthread.php") >= 0){
@@ -105,26 +103,26 @@ if (currentPage.indexOf("showthread.php") >= 0){
 				$(this).find(".postdetails, .postfoot").css("background", "rgba(238, 255, 188, 1.0)");
 		}
 
-		if (localStorage.fpfIgnoreLink == "true" && usergroup.html().indexOf(username) === -1){
+		if (localStorage.fpfIgnoreLink == "true" && usergroup.html().indexOf(username) == -1){
 			posterid = $(this).find("a.username").attr("href");
 			posterid = posterid.replace("member.php?u=", "");
 			$(this).find(".postlinking").append("<a href='profile.php?do=addlist&userlist=ignore&u="+posterid+"' target='_blank'><img src='https://i.imgur.com/RaoUuug.png'/ title='Ignore User'></a>");
 		}
 	});
 
-	if (localStorage.fpfThreadTitleHighlight === "true")
+	if (localStorage.fpfThreadTitleHighlight == "true")
 		$("#lastelement").css({ "color": "#FF0000", "font-weight": "bold" });	//makes thread titles glowy and red
 
-	if (localStorage.fpfHighlightLast === "true")
+	if (localStorage.fpfHighlightLast == "true")
 		$(".postcontainer").last().find(".posthead").css("background", "rgba(34, 136, 255, 1.0)");
 
-	if (localStorage.fpfFadeIgnored === "true"){
+	if (localStorage.fpfFadeIgnored == "true"){
 		$(".postbitignored").each(function(){
 			$(this).fadeTo(0, 0.15);
 		});
 	}
 
-	if (localStorage.fpfResizeUserTitles === "true"){	//Code by luastoned (https://facepunch.com/member.php?u=118944)
+	if (localStorage.fpfResizeUserTitles == "true"){	//Code by luastoned (https://facepunch.com/member.php?u=118944)
 		var userTitles = document.getElementsByClassName("usertitle");
 		for (var i = 0; i < userTitles.length; i++){
 			userTitles[i].style.fontSize = "10px";
@@ -135,7 +133,7 @@ if (currentPage.indexOf("showthread.php") >= 0){
 	}
 }
 
-else if (currentPage.indexOf("member.php") >= 0 && localStorage.fpfProfileMessageDeleted === "true"){	//code found on a post from Teddybeer
+else if (currentPage.indexOf("member.php") >= 0 && localStorage.fpfProfileMessageDeleted == "true"){	//code found on a post from Teddybeer
 	$("li:contains('This message has been deleted by')").remove();
 }
 
@@ -143,7 +141,7 @@ else if (currentPage.indexOf("/members/") >= 0){	//for some reason fp uses two s
 	window.location.href=currentPage.replace("members/", "member.php?u=");
 }
 
-else if ((currentPage.indexOf("forum.php") >= 0 || currentPage == ("https://facepunch.com/")) && localStorage.fpfDoubleColumn === "true"){	//Code posted by Baboo00 -- https://goo.gl/mSlBfW
+else if ((currentPage.indexOf("forum.php") >= 0 || currentPage == ("https://facepunch.com/")) && localStorage.fpfDoubleColumn == "true"){	//Code posted by Baboo00 -- https://goo.gl/mSlBfW
 	$(".forums").first().next().nextAll().appendTo($("<td valign='top' class='FrontPageForums'></td>").insertAfter(".FrontPageForums"));
 	$(".FrontPageForums").css("padding", "5px");
     $(".last_post_column").css("max-width", "200px");
