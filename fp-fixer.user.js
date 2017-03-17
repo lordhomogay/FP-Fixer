@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name            FPFixer
 // @namespace       no
-// @version         0.5
+// @version         0.9
 // @description     Provides various changes to facepunch.com
 // @match           facepunch.com/*
 // @match           www.facepunch.com/*
@@ -11,18 +11,12 @@ scrape ignored users and block their threads from appearing
 */
 
 if (!localStorage.fpfInit) {
-	localStorage.setItem("fpfInit", "true");
-	localStorage.setItem("fpfNavbar", "true");
-	localStorage.setItem("fpfLogo", "true");
-	localStorage.setItem("fpfLogoutButton", "true");
-	localStorage.setItem("fpfNotablePosts", "true");
-	localStorage.setItem("fpfIgnoreLink", "true");
-	localStorage.setItem("fpfThreadTitleHighlight", "true");
-	localStorage.setItem("fpfFadeIgnored", "true");
-	localStorage.setItem("fpfResizeUserTitles", "true");
-	localStorage.setItem("fpfProfileMessageDeleted", "true");
-	localStorage.setItem("fpfDoubleColumn", "true");
-	localStorage.setItem("fpfHighlightLast", "true");
+	localStorage.setItem("fpfInit", "true");	localStorage.setItem("fpfNavbar", "true");
+	localStorage.setItem("fpfLogo", "true");	localStorage.setItem("fpfLogoutButton", "true");
+	localStorage.setItem("fpfNotablePosts", "true");	localStorage.setItem("fpfIgnoreLink", "true");
+	localStorage.setItem("fpfThreadTitleHighlight", "true");	localStorage.setItem("fpfFadeIgnored", "true");
+	localStorage.setItem("fpfResizeUserTitles", "true");	localStorage.setItem("fpfProfileMessageDeleted", "true");
+	localStorage.setItem("fpfDoubleColumn", "true");	localStorage.setItem("fpfHighlightLast", "true");
 	alert("FP Fixer initialized. Be sure to adjust the settings in the new navbar link.");
 }
 
@@ -33,8 +27,7 @@ $.ajax({
 	url: 'https://rawgit.com/lordhomogay/FP-Fixer/feature-test/options.html',
 	cache: false,
 	success: function(data) {
-		html = data;
-	}
+		html = data;	}
 });
 
 function toggle(setting){
@@ -117,8 +110,7 @@ if (currentPage.indexOf("showthread.php") >= 0){
 		if (localStorage.fpfIgnoreLink == "true" && usergroup.html().indexOf(username) == -1){
 			posterid = $(this).find("a.username").attr("href");
 			posterid = posterid.replace("member.php?u=", "");
-			$(this).find(".postlinking").append("<a href='profile.php?do=addlist&userlist=ignore&u="+posterid+"' target='_blank'><img src='https://i.imgur.com/RaoUuug.png'/ title='Ignore User'></a>");
-		}
+			$(this).find(".postlinking").append("<a href='profile.php?do=addlist&userlist=ignore&u="+posterid+"' target='_blank'><img src='https://i.imgur.com/RaoUuug.png'/ title='Ignore User'></a>");	}
 	});
 
 	if (localStorage.fpfThreadTitleHighlight == "true")
@@ -129,8 +121,7 @@ if (currentPage.indexOf("showthread.php") >= 0){
 
 	if (localStorage.fpfFadeIgnored == "true"){
 		$(".postbitignored").each(function(){
-			$(this).fadeTo(0, 0.15);
-		});
+			$(this).fadeTo(0, 0.15);	});
 	}
 
 	if (localStorage.fpfResizeUserTitles == "true"){	//Code by luastoned (https://facepunch.com/member.php?u=118944)
@@ -139,25 +130,21 @@ if (currentPage.indexOf("showthread.php") >= 0){
 			userTitles[i].style.fontSize = "10px";
 			var fontTags = userTitles[i].getElementsByTagName("font");
 			for (var j = 0; j < fontTags.length; j++)
-				fontTags[j].setAttribute("size", 1);
-		}
+				fontTags[j].setAttribute("size", 1);	}
 	}
 }
 
 else if (currentPage.indexOf("member.php") >= 0 && localStorage.fpfProfileMessageDeleted == "true"){	//code found on a post from Teddybeer
-	$("li:contains('This message has been deleted by')").remove();
-}
+	$("li:contains('This message has been deleted by')").remove();	}
 
 else if (currentPage.indexOf("/members/") >= 0){	//for some reason fp uses two syntaxes for profiles. clicking an avatar on forumhome.php uses this syntax, nothing else that i know of uses it.
-	window.location.href=currentPage.replace("members/", "member.php?u=");
-}
+	window.location.href=currentPage.replace("members/", "member.php?u=");	}
 
 else if ((currentPage.indexOf("forum.php") >= 0 || currentPage == ("https://facepunch.com/")) && localStorage.fpfDoubleColumn == "true"){	//Code posted by Baboo00 -- https://goo.gl/mSlBfW
 	$(".forums").first().next().nextAll().appendTo($("<td valign='top' class='FrontPageForums'></td>").insertAfter(".FrontPageForums"));
 	$(".FrontPageForums").css("padding", "5px");
     $(".last_post_column").css("max-width", "200px");
-    $(".last_post_column").css("min-width", "200px");
-}
+    $(".last_post_column").css("min-width", "200px");	}
 
 $(".fakeLink").click();	//this fixes the double click bug
 $(".fakeLink").css("cursor", "pointer");
