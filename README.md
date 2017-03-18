@@ -9,3 +9,4 @@ A userscript for facepunch.com that adds features, such as
 * Hiding "this message has been deleted" on the profile page
 * Reverting the single column home page to double column
 * Highlighting the last post in a thread
+* Enhances the ignore function in vBulletin
