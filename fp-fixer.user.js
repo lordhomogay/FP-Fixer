@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name            FPFixer
 // @namespace       lordhomogay
-// @version         1.0
+// @version         1.01
 // @description     Provides various changes to facepunch.com
 // @match           facepunch.com/*
 // @match           www.facepunch.com/*
@@ -43,47 +43,44 @@ function toggle(setting){
 		$("#"+setting).css("background-color", "rgb(110, 255, 122)");	}
 }
 
-function enhanceIgnore(){
-	ignoredUsers = JSON.parse(localStorage.getItem("ignoredUsers"));
-	for (i=0; i<ignoredUsers.length; i++)
-		$(".author:contains("+ignoredUsers[i]+")").parent().parent().parent().parent().fadeTo(0, 0.15);	}
 
-
-$("#navbarlinks").append("<span id='fpfOptions' class='navbarlink fakeLink' style='float:left; padding-right:1em'><img src='/fp/ratings/information.png' />FPF Options</span>");
+$("#navbarlinks").append("<span id='fpfOptions' class='navbarlink fakeClick' style='float:left; padding-right:1em; cursor: pointer'><img src='/fp/ratings/information.png' />FPF Options</span>");
 $("#fpfOptions").click(function(){
 	CreateFloatingDiv(MouseX, MouseY, "fpfOptionsMenu", "urlBox");
 	fpfOptionsMenu.innerHTML = html;	//holy fuck i know this is ugly
-	$("#fpfNavbar").append(localStorage.fpfNavbar);
+	$("#fpfNavbar").append(localStorage.getItem("fpfNavbar"));
 		$("#fpfNavbar").click(function(){ toggle("fpfNavbar"); });
-	$("#fpfLogo").append(localStorage.fpfLogo);
+	$("#fpfLogo").append(localStorage.getItem("fpfLogo"));
 		$("#fpfLogo").click(function(){ toggle("fpfLogo"); });
-	$("#fpfLogoutButton").append(localStorage.fpfLogoutButton);
+	$("#fpfLogoutButton").append(localStorage.getItem("fpfLogoutButton"));
 		$("#fpfLogoutButton").click(function(){ toggle("fpfLogoutButton"); });
-	$("#fpfNotablePosts").append(localStorage.fpfNotablePosts);
+	$("#fpfNotablePosts").append(localStorage.getItem("fpfNotablePosts"));
 		$("#fpfNotablePosts").click(function(){ toggle("fpfNotablePosts"); });
-	$("#fpfIgnoreLink").append(localStorage.fpfIgnoreLink);
+	$("#fpfIgnoreLink").append(localStorage.getItem("fpfIgnoreLink"));
 		$("#fpfIgnoreLink").click(function(){ toggle("fpfIgnoreLink"); });
-	$("#fpfThreadTitleHighlight").append(localStorage.fpfThreadTitleHighlight);
+	$("#fpfThreadTitleHighlight").append(localStorage.getItem("fpfThreadTitleHighlight"));
 		$("#fpfThreadTitleHighlight").click(function(){ toggle("fpfThreadTitleHighlight"); });
-	$("#fpfEnhancedIgnore").append(localStorage.fpfEnhancedIgnore);
+	$("#fpfEnhancedIgnore").append(localStorage.getItem("fpfEnhancedIgnore"));
 		$("#fpfEnhancedIgnore").click(function(){ toggle("fpfEnhancedIgnore"); });
-	$("#fpfResizeUserTitles").append(localStorage.fpfResizeUserTitles);
+	$("#fpfResizeUserTitles").append(localStorage.getItem("fpfResizeUserTitles"));
 		$("#fpfResizeUserTitles").click(function(){ toggle("fpfResizeUserTitles"); });
-	$("#fpfProfileMessageDeleted").append(localStorage.fpfProfileMessageDeleted);
+	$("#fpfProfileMessageDeleted").append(localStorage.getItem("fpfProfileMessageDeleted"));
 		$("#fpfProfileMessageDeleted").click(function(){ toggle("fpfProfileMessageDeleted"); });
-	$("#fpfDoubleColumn").append(localStorage.fpfDoubleColumn);
+	$("#fpfDoubleColumn").append(localStorage.getItem("fpfDoubleColumn"));
 		$("#fpfDoubleColumn").click(function(){ toggle("fpfDoubleColumn"); });
-	$("#fpfHighlightLast").append(localStorage.fpfHighlightLast);
+	$("#fpfHighlightLast").append(localStorage.getItem("fpfHighlightLast"));
 		$("#fpfHighlightLast").click(function(){ toggle("fpfHighlightLast"); });
 	$("#fpfUpdateIgnored").css("background-color", "rgba(0, 205, 255, 0.5)");
 		$("#fpfUpdateIgnored").click(function(){ window.location.href ="/profile.php?do=ignorelist"; });
 	$("#fpfOptionsMenu").children(":contains('true')").css("background-color", "rgba(110, 255, 112, 0.5");
 	$("#fpfOptionsMenu").children(":contains('false')").css("background-color", "rgba(246, 201, 204, 0.5");
-	$(".fakeLink").css({
+	$("#fpfOptionsMenu").children(".fakeLink").hover(function(){	$(this).fadeTo(0, 0.5);	},	function(){	$(this).fadeTo(0, 1.0);	});
+	$("#fpfOptionsMenu .fakeLink").css({
 		"margin-bottom": "2px",
-		"cursor": "pointers",
+		"cursor": "pointer",
 		"font-size": "11px"	});
 });
+$("#fpfOptions").click();	//this fixes the double click bug
 
 if (localStorage.getItem("fpfNavbar") === "true")
 	$("#navbarlinks").prepend("<div class='navbarlink'><a href='/fp_ticker.php'><img src='/fp/navbar/ticker.png'/>Ticker</a></div>");
@@ -150,21 +147,24 @@ else if (currentPage.indexOf("member.php") >= 0 && localStorage.getItem("fpfProf
 else if (currentPage.indexOf("/members/") >= 0){	//for some reason fp uses two syntaxes for profiles. clicking an avatar on forumhome.php uses this syntax, nothing else that i know of uses it.
 	window.location.href=currentPage.replace("members/", "member.php?u=");	}
 
-else if ((currentPage.indexOf("forum.php") >= 0 || currentPage == ("https://facepunch.com/")) && localStorage.getItem("fpfDoubleColumn") === "true"){	//Code posted by Baboo00 -- https://goo.gl/mSlBfW
+else if ( (currentPage.indexOf("forum.php") >= 0 || currentPage == ("https://facepunch.com/")) && localStorage.getItem("fpfDoubleColumn") === "true"){	//Code posted by Baboo00 -- https://goo.gl/mSlBfW
 	$(".forums").first().next().nextAll().appendTo($("<td valign='top' class='FrontPageForums'></td>").insertAfter(".FrontPageForums"));
 	$(".FrontPageForums").css("padding", "5px");
     $(".last_post_column").css("max-width", "200px");
     $(".last_post_column").css("min-width", "200px");	}
 
-else if (currentPage.indexOf("ignorelist") >= 0 && localStorage.getItem("fpfEnhancedIgnore") === "true"){
+else if (currentPage.indexOf("profile.php?do=ignorelist") >= 0 && localStorage.getItem("fpfEnhancedIgnore") === "true"){
 	ignoredList = [];
 	$("#ignorelist").children("li").children("a").each(function(){ ignoredList.push($(this).text()); });
-	localStorage.setItem("ignoredUsers", JSON.stringify(ignoredList));	}
+	localStorage.setItem("ignoredUsers", JSON.stringify(ignoredList));
+	alert("FP Fixer ignore list updated");	}
 
-else if ((currentPage.indexOf("forumdisplay.php") >0 || currentPage.indexOf("fp_popular.php")) && localStorage.getItem("fpfEnhancedIgnore") === "true"){
-	enhanceIgnore();
-}
+else if ( (currentPage.indexOf("forumdisplay.php") >=0 || currentPage.indexOf("fp_popular.php") >=0 || currentPage.indexOf("fp_read.php") >= 0) && localStorage.getItem("fpfEnhancedIgnore") === "true"){
+	ignoredUsers = JSON.parse(localStorage.getItem("ignoredUsers"));
+	for (i=0; i<ignoredUsers.length; i++)
+		$(".author:contains("+ignoredUsers[i]+")").parent().parent().parent().parent().fadeTo(0, 0.15);	}
 
-$(".fakeLink").click();	//this fixes the double click bug
-$(".fakeLink").css("cursor", "pointer");
+else if ( (currentPage.indexOf("profile.php?do=doaddlist&list=") >=0 || currentPage.indexOf("profile.php?do=doremovelist&list=&userid=") >=0) && localStorage.getItem("fpfEnhancedIgnore") === "true")
+	alert("Be sure to click \"update ignored users\" in the FPF Options menu!");
+
 console.info("FP Fixer completed successfully");
