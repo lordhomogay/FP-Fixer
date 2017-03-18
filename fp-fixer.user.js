@@ -79,6 +79,10 @@ $("#fpfOptions").click(function(){
 		$("#fpfUpdateIgnored").click(function(){ window.location.href ="/profile.php?do=ignorelist"; });
 	$("#fpfOptionsMenu").children(":contains('true')").css("background-color", "rgba(110, 255, 112, 0.5");
 	$("#fpfOptionsMenu").children(":contains('false')").css("background-color", "rgba(246, 201, 204, 0.5");
+	$(".fakeLink").css({
+		"margin-bottom": "2px",
+		"cursor": "pointers",
+		"font-size": "11px"	});
 });
 
 if (localStorage.getItem("fpfNavbar") === "true")
