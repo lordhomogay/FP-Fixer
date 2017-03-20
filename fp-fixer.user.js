@@ -12,17 +12,20 @@ if (!localStorage.fpfInit) {
 	localStorage.setItem("fpfLogo", "true");	localStorage.setItem("fpfLogoutButton", "true");
 	localStorage.setItem("fpfNotablePosts", "true");	localStorage.setItem("fpfIgnoreLink", "true");
 	localStorage.setItem("fpfThreadTitleHighlight", "true");	localStorage.setItem("fpfEnhancedIgnore", "true");
-	localStorage.setItem("fpfResizeUserTitles", "true");	localStorage.setItem("fpfProfileMessageDeleted", "true");
+	localStorage.setItem("fpfResizeUserTitles", "true");	//localStorage.setItem("fpfProfileMessageDeleted", "true");	//this is a silly feature. why did i add it?
 	localStorage.setItem("fpfDoubleColumn", "true");	localStorage.setItem("fpfHighlightLast", "true");
-	alert("FP Fixer initialized. Be sure to adjust the settings in the new navbar link.");
-}
+	alert("FP Fixer initialized. Be sure to adjust the settings in the new navbar link.");	}
+
+var settings = [	"fpfNavbar", "fpfLogo", "fpfLogoutButton",
+					"fpfNotablePosts", "fpfIgnoreLink", "fpfThreadTitleHighlight",
+					"fpfEnhancedIgnore", "fpfResizeUserTitles", //"fpfProfileMessageDeleted",
+					"fpfDoubleColumn", "fpfHighlightLast"	];
 
 var currentPage = window.location.href.replace("www.", "");
-var html;
-var ignoredUsers;
+var html, ignoredUsers;
 
 $.ajax({
-	url: 'https://cdn.rawgit.com/lordhomogay/FP-Fixer/acad0995/options.html',
+	url: 'https://cdn.rawgit.com/lordhomogay/FP-Fixer/1491d84c/options.html',
 	cache: false,
 	success: function(data) {
 		html = data;	}
@@ -64,12 +67,20 @@ $("#fpfOptions").click(function(){
 		$("#fpfEnhancedIgnore").click(function(){ toggle("fpfEnhancedIgnore"); });
 	$("#fpfResizeUserTitles").append(localStorage.getItem("fpfResizeUserTitles"));
 		$("#fpfResizeUserTitles").click(function(){ toggle("fpfResizeUserTitles"); });
-	$("#fpfProfileMessageDeleted").append(localStorage.getItem("fpfProfileMessageDeleted"));
-		$("#fpfProfileMessageDeleted").click(function(){ toggle("fpfProfileMessageDeleted"); });
+//	$("#fpfProfileMessageDeleted").append(localStorage.getItem("fpfProfileMessageDeleted"));
+//		$("#fpfProfileMessageDeleted").click(function(){ toggle("fpfProfileMessageDeleted"); });
 	$("#fpfDoubleColumn").append(localStorage.getItem("fpfDoubleColumn"));
 		$("#fpfDoubleColumn").click(function(){ toggle("fpfDoubleColumn"); });
 	$("#fpfHighlightLast").append(localStorage.getItem("fpfHighlightLast"));
 		$("#fpfHighlightLast").click(function(){ toggle("fpfHighlightLast"); });
+/*	for (i=0; i<settings.length; i++){		//i have no clue why this doesn't work
+		fpf = settings[i];
+		$("#"+fpf).append(localStorage.getItem(fpf));
+		$("#"+fpf).click(function(){ toggle(fpf); });	}	*/
+/*		$(settings).each(function(){		//i didnt expect this to work, and it didnt
+			x = $(this)
+			$("#"+x).append(localStorage.getItem(x));
+			$("#"+x).click(function(){ toggle(x); });	});	*/
 	$("#fpfUpdateIgnored").css("background-color", "rgba(0, 205, 255, 0.5)");
 		$("#fpfUpdateIgnored").click(function(){ window.location.href ="/profile.php?do=ignorelist"; });
 	$("#fpfOptionsMenu").children(":contains('true')").css("background-color", "rgba(110, 255, 112, 0.5");
@@ -86,7 +97,7 @@ if (localStorage.getItem("fpfNavbar") === "true")
 	$("#navbarlinks").prepend("<div class='navbarlink'><a href='/fp_ticker.php'><img src='/fp/navbar/ticker.png'/>Ticker</a></div>");
 
 if (localStorage.getItem("fpfLogo") === "true")
-	$("#logo").children().children().attr("src", "https://cdn.rawgit.com/lordhomogay/FP-Fixer/feature-test/fplogo.png");
+	$("#logo").children().children().attr("src", "https://cdn.rawgit.com/lordhomogay/FP-Fixer/1491d84c/fplogo.png");
 
 if(SECURITYTOKEN != "guest" && localStorage.getItem("fpfLogoutButton") === "true")
 	$(".footer_links").prepend("<a href='login.php?do=logout&logouthash="+SECURITYTOKEN+"'>Logout</a> - ");
@@ -141,8 +152,8 @@ if (currentPage.indexOf("showthread.php") >= 0){
 	}
 }
 
-else if (currentPage.indexOf("member.php") >= 0 && localStorage.getItem("fpfProfileMessageDeleted") === "true"){	//code found on a post from Teddybeer
-	$("li:contains('This message has been deleted by')").remove();	}
+//else if (currentPage.indexOf("member.php") >= 0 && localStorage.getItem("fpfProfileMessageDeleted") === "true"){	//code found on a post from Teddybeer
+//	$("li:contains('This message has been deleted by')").remove();	}
 
 else if (currentPage.indexOf("/members/") >= 0){	//for some reason fp uses two syntaxes for profiles. clicking an avatar on forumhome.php uses this syntax, nothing else that i know of uses it.
 	window.location.href=currentPage.replace("members/", "member.php?u=");	}
