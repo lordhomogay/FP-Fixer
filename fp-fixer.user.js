@@ -25,13 +25,13 @@ var currentPage = window.location.href.replace("www.", "");
 var html, ignoredUsers;
 
 $.ajax({
-	url: 'https://cdn.rawgit.com/lordhomogay/FP-Fixer/1491d84c/options.html',
+	url: 'https://rawgit.com/lordhomogay/FP-Fixer/feature-test/options.html',
 	cache: false,
 	success: function(data) {
 		html = data;	}
 });
 
-function toggle(setting){
+function fpfToggle(setting){
 	if (localStorage.getItem(setting)  === "true"){
 		temphtml = $("#"+setting).html();
 		temphtml = temphtml.replace("true", "false");
@@ -52,35 +52,31 @@ $("#fpfOptions").click(function(){
 	CreateFloatingDiv(MouseX, MouseY, "fpfOptionsMenu", "urlBox");
 	fpfOptionsMenu.innerHTML = html;	//holy fuck i know this is ugly
 	$("#fpfNavbar").append(localStorage.getItem("fpfNavbar"));
-		$("#fpfNavbar").click(function(){ toggle("fpfNavbar"); });
+		$("#fpfNavbar").click(function(){ fpfToggle("fpfNavbar"); });
 	$("#fpfLogo").append(localStorage.getItem("fpfLogo"));
-		$("#fpfLogo").click(function(){ toggle("fpfLogo"); });
+		$("#fpfLogo").click(function(){ fpfToggle("fpfLogo"); });
 	$("#fpfLogoutButton").append(localStorage.getItem("fpfLogoutButton"));
-		$("#fpfLogoutButton").click(function(){ toggle("fpfLogoutButton"); });
+		$("#fpfLogoutButton").click(function(){ fpfToggle("fpfLogoutButton"); });
 	$("#fpfNotablePosts").append(localStorage.getItem("fpfNotablePosts"));
-		$("#fpfNotablePosts").click(function(){ toggle("fpfNotablePosts"); });
+		$("#fpfNotablePosts").click(function(){ fpfToggle("fpfNotablePosts"); });
 	$("#fpfIgnoreLink").append(localStorage.getItem("fpfIgnoreLink"));
-		$("#fpfIgnoreLink").click(function(){ toggle("fpfIgnoreLink"); });
+		$("#fpfIgnoreLink").click(function(){ fpfToggle("fpfIgnoreLink"); });
 	$("#fpfThreadTitleHighlight").append(localStorage.getItem("fpfThreadTitleHighlight"));
-		$("#fpfThreadTitleHighlight").click(function(){ toggle("fpfThreadTitleHighlight"); });
+		$("#fpfThreadTitleHighlight").click(function(){ fpfToggle("fpfThreadTitleHighlight"); });
 	$("#fpfEnhancedIgnore").append(localStorage.getItem("fpfEnhancedIgnore"));
-		$("#fpfEnhancedIgnore").click(function(){ toggle("fpfEnhancedIgnore"); });
+		$("#fpfEnhancedIgnore").click(function(){ fpfToggle("fpfEnhancedIgnore"); });
 	$("#fpfResizeUserTitles").append(localStorage.getItem("fpfResizeUserTitles"));
-		$("#fpfResizeUserTitles").click(function(){ toggle("fpfResizeUserTitles"); });
+		$("#fpfResizeUserTitles").click(function(){ fpfToggle("fpfResizeUserTitles"); });
 //	$("#fpfProfileMessageDeleted").append(localStorage.getItem("fpfProfileMessageDeleted"));
-//		$("#fpfProfileMessageDeleted").click(function(){ toggle("fpfProfileMessageDeleted"); });
+//		$("#fpfProfileMessageDeleted").click(function(){ fpfToggle("fpfProfileMessageDeleted"); });
 	$("#fpfDoubleColumn").append(localStorage.getItem("fpfDoubleColumn"));
-		$("#fpfDoubleColumn").click(function(){ toggle("fpfDoubleColumn"); });
+		$("#fpfDoubleColumn").click(function(){ fpfToggle("fpfDoubleColumn"); });
 	$("#fpfHighlightLast").append(localStorage.getItem("fpfHighlightLast"));
-		$("#fpfHighlightLast").click(function(){ toggle("fpfHighlightLast"); });
+		$("#fpfHighlightLast").click(function(){ fpfToggle("fpfHighlightLast"); });
 /*	for (i=0; i<settings.length; i++){		//i have no clue why this doesn't work
 		fpf = settings[i];
 		$("#"+fpf).append(localStorage.getItem(fpf));
 		$("#"+fpf).click(function(){ toggle(fpf); });	}	*/
-/*		$(settings).each(function(){		//i didnt expect this to work, and it didnt
-			x = $(this)
-			$("#"+x).append(localStorage.getItem(x));
-			$("#"+x).click(function(){ toggle(x); });	});	*/
 	$("#fpfUpdateIgnored").css("background-color", "rgba(0, 205, 255, 0.5)");
 		$("#fpfUpdateIgnored").click(function(){ window.location.href ="/profile.php?do=ignorelist"; });
 	$("#fpfOptionsMenu").children(":contains('true')").css("background-color", "rgba(110, 255, 112, 0.5");
@@ -128,7 +124,7 @@ if (currentPage.indexOf("showthread.php") >= 0){
 		if (localStorage.getItem("fpfIgnoreLink") === "true" && usergroup.html().indexOf(username) == -1){
 			posterid = $(this).find("a.username").attr("href");
 			posterid = posterid.replace("member.php?u=", "");
-			$(this).find(".postlinking").append("<a href='profile.php?do=addlist&userlist=ignore&u="+posterid+"' target='_blank'><img src='https://i.imgur.com/RaoUuug.png'/ title='Ignore User'></a>");	}
+			$(this).find(".postlinking").append("<a href='profile.php?do=addlist&userlist=ignore&u="+posterid+"' target='_blank'><img src='https://cdn.rawgit.com/lordhomogay/FP-Fixer/9bd357bf/ignore.png'/ title='Ignore User'></a>");	}
 	});
 
 	if (localStorage.getItem("fpfThreadTitleHighlight") === "true")
@@ -139,7 +135,8 @@ if (currentPage.indexOf("showthread.php") >= 0){
 
 	if (localStorage.getItem("fpfEnhancedIgnore") === "true"){
 		$(".postbitignored").each(function(){
-			$(this).fadeTo(0, 0.15);	});
+			$(this).fadeTo(0, 0.1);
+			$(this).hover(function(){	$(this).fadeTo(300, 1);	},	function(){	$(this).fadeTo(300, 0.1);	}); 	});
 	}
 
 	if (localStorage.getItem("fpfResizeUserTitles") === "true"){	//Code by luastoned (https://facepunch.com/member.php?u=118944)
@@ -172,8 +169,10 @@ else if (currentPage.indexOf("profile.php?do=ignorelist") >= 0 && localStorage.g
 
 else if ( (currentPage.indexOf("forumdisplay.php") >=0 || currentPage.indexOf("fp_popular.php") >=0 || currentPage.indexOf("fp_read.php") >= 0) && localStorage.getItem("fpfEnhancedIgnore") === "true"){
 	ignoredUsers = JSON.parse(localStorage.getItem("ignoredUsers"));
-	for (i=0; i<ignoredUsers.length; i++)
-		$(".author:contains("+ignoredUsers[i]+")").parent().parent().parent().parent().fadeTo(0, 0.15);	}
+	for (i=0; i<ignoredUsers.length; i++) {
+		$(".author:contains("+ignoredUsers[i]+")").parent().parent().parent().parent().fadeTo(0, 0.1);
+		$(".author:contains("+ignoredUsers[i]+")").parent().parent().parent().parent().hover(function(){	$(this).fadeTo(300, 1);	},	function(){	$(this).fadeTo(300, 0.1);	});	}
+}
 
 else if ( (currentPage.indexOf("profile.php?do=doaddlist&list=") >=0 || currentPage.indexOf("profile.php?do=doremovelist&list=&userid=") >=0) && localStorage.getItem("fpfEnhancedIgnore") === "true")
 	alert("Be sure to click \"update ignored users\" in the FPF Options menu!");
