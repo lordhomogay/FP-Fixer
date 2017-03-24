@@ -32,7 +32,7 @@ if (!localStorage.fpfSettings){
 var settings = JSON.parse(localStorage.getItem("fpfSettings"));
 settings.ignoredUsers = JSON.parse(settings.ignoredUsers);
 var currentPage = window.location.href.replace("www.", "");
-var html;
+var html, runOnce = false;
 
 $.ajax({
 	url: 'https://rawgit.com/lordhomogay/FP-Fixer/feature-test/options.html',
@@ -54,7 +54,8 @@ function fpfToggle(toToggle){
 		settings[toToggle] = "true";	}
 
 	$("#fpf"+toToggle).html(temphtml);
-	settings.ignoredUsers = JSON.stringify(settings.ignoredUsers);	//this must be done to preserve proper JSON formatting
+	if (!runOnce)
+		settings.ignoredUsers = JSON.stringify(settings.ignoredUsers);	runOnce = true;	//this must be done to preserve proper JSON formatting
 	localStorage.setItem("fpfSettings", JSON.stringify(settings));
 }
 
