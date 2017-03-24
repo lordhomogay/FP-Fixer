@@ -7,30 +7,28 @@
 // @match           www.facepunch.com/*
 // ==/UserScript==
 
-if (!localStorage.fpfInit) {
-	localStorage.setItem("fpfInit", "true");	localStorage.setItem("fpfNavbar", "true");
-	localStorage.setItem("fpfLogo", "true");	localStorage.setItem("fpfLogoutButton", "true");
-	localStorage.setItem("fpfNotablePosts", "true");	localStorage.setItem("fpfIgnoreLink", "true");
-	localStorage.setItem("fpfThreadTitleHighlight", "true");	localStorage.setItem("fpfEnhancedIgnore", "true");
-	localStorage.setItem("fpfResizeUserTitles", "true");	//localStorage.setItem("fpfProfileMessageDeleted", "true");	//this is a silly feature. why did i add it?
-	localStorage.setItem("fpfDoubleColumn", "true");	localStorage.setItem("fpfHighlightLast", "true");
-	alert("FP Fixer initialized. Be sure to adjust the settings in the new navbar link.");
+// current bugs:
+// can't toggle settings
+
+if (!localStorage.fpfSettings){
+	var settings = {
+		navbar: "true",
+		logo: "true",
+		logoutButton: "true",
+		notablePosts: "true",
+		ignoreLink: "true",
+		threadTitleHighlight: "true",
+		enhancedIgnore: "true",
+		resizeUserTitles: "true",
+		doubleColumn: "true",
+		highlightLast: "true",
+		ignoredUsers: '["AEGDanuta"]'	};	//this is the easiest way to prevent a JSON parsing error. user AEGDanuta is a spambot, not a legitimate user
+	localStorage.setItem("fpfSettings", JSON.stringify(settings));
+	alert("Facepunch Fixer initialized. Be sure to adjust the settings in the new navbar link");
 	location.reload();	}
 
-var settings = {
-	navbar:	localStorage.getItem("fpfNavbar"),
-	logo:	localStorage.getItem("fpfLogo"),
-	logoutButton:	localStorage.getItem("fpfLogoutButton"),
-	notablePosts:	localStorage.getItem("fpfNotablePosts"),
-	ignoreLink:	localStorage.getItem("fpfIgnoreLink"),
-	threadTitleHighlight:	localStorage.getItem("fpfThreadTitleHighlight"),
-	enhancedIgnore:	localStorage.getItem("fpfEnhancedIgnore"),
-	resizeUserTitles:	localStorage.getItem("fpfResizeUserTitles"),
-	doubleColumn:	localStorage.getItem("fpfDoubleColumn"),
-	highlightLast:	localStorage.getItem("fpfHighlightLast"),
-	ignoredUsers: JSON.parse(localStorage.getItem("fpfignoredUsers"))	};
-
-
+var settings = JSON.parse(localStorage.getItem("fpfSettings"));
+settings.ignoredUsers = JSON.parse(settings.ignoredUsers);
 var currentPage = window.location.href.replace("www.", "");
 var html;
 
@@ -173,9 +171,10 @@ else if ( (currentPage.indexOf("forum.php") >= 0 || currentPage == ("https://fac
     $(".last_post_column").css("min-width", "200px");	}
 
 else if (currentPage.indexOf("profile.php?do=ignorelist") >= 0 && settings.enhancedIgnore === "true"){
-	ignoredList = [];
-	$("#ignorelist").children("li").children("a").each(function(){ ignoredList.push($(this).text()); });
-	localStorage.setItem("fpfignoredUsers", JSON.stringify(ignoredList));
+	ignoreList = [];
+	$("#ignorelist").children("li").children("a").each(function(){ ignoreList.push($(this).text()); });
+	settings.ignoredUsers = JSON.stringify(ignoreList);
+	localStorage.setItem("fpfSettings", JSON.stringify(settings));
 	alert("FP Fixer ignore list updated");	}
 
 else if ( (currentPage.indexOf("forumdisplay.php") >=0 || currentPage.indexOf("fp_popular.php") >=0 || currentPage.indexOf("fp_read.php") >= 0) && settings.enhancedIgnore === "true"){
