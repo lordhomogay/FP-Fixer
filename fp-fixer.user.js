@@ -1,36 +1,36 @@
 // ==UserScript==
 // @name            FPFixer
 // @namespace       lordhomogay
-// @version         1.01
+// @version         1.1
 // @description     Provides various changes to facepunch.com
 // @match           facepunch.com/*
 // @match           www.facepunch.com/*
 // ==/UserScript==
 
-if (!localStorage.fpfInit) {
-	localStorage.setItem("fpfInit", "true");	localStorage.setItem("fpfNavbar", "true");
-	localStorage.setItem("fpfLogo", "true");	localStorage.setItem("fpfLogoutButton", "true");
-	localStorage.setItem("fpfNotablePosts", "true");	localStorage.setItem("fpfIgnoreLink", "true");
-	localStorage.setItem("fpfThreadTitleHighlight", "true");	localStorage.setItem("fpfEnhancedIgnore", "true");
-	localStorage.setItem("fpfResizeUserTitles", "true");	//localStorage.setItem("fpfProfileMessageDeleted", "true");	//this is a silly feature. why did i add it?
-	localStorage.setItem("fpfDoubleColumn", "true");	localStorage.setItem("fpfHighlightLast", "true");
-	alert("FP Fixer initialized. Be sure to adjust the settings in the new navbar link.");
+//todo
+//convert all strings in settings object to booleans
+//temphtml = temphtml.replace(settings[toToggle], !settings[toToggle]); // this line should make the if/else statement unnecessary
+//continue trying to improve the fpfOptionsMenu generation code. it's butt ugly
+
+if (!localStorage.fpfSettings){
+	var settings = {
+		navbar: "true",
+		logo: "true",
+		logoutButton: "true",
+		notablePosts: "true",
+		ignoreLink: "true",
+		threadTitleHighlight: "true",
+		enhancedIgnore: "true",
+		resizeUserTitles: "true",
+		doubleColumn: "true",
+		highlightLast: "true",
+		ignoredUsers: '["AEGDanuta"]'	};	//this is the easiest way to prevent a JSON parsing error. user AEGDanuta is a spambot, not a legitimate user
+	localStorage.setItem("fpfSettings", JSON.stringify(settings));
+	alert("Facepunch Fixer initialized. Be sure to adjust the settings in the new navbar link");
 	location.reload();	}
 
-var settings = {
-	navbar:	localStorage.getItem("fpfNavbar"),
-	logo:	localStorage.getItem("fpfLogo"),
-	logoutButton:	localStorage.getItem("fpfLogoutButton"),
-	notablePosts:	localStorage.getItem("fpfNotablePosts"),
-	ignoreLink:	localStorage.getItem("fpfIgnoreLink"),
-	threadTitleHighlight:	localStorage.getItem("fpfThreadTitleHighlight"),
-	enhancedIgnore:	localStorage.getItem("fpfEnhancedIgnore"),
-	resizeUserTitles:	localStorage.getItem("fpfResizeUserTitles"),
-	doubleColumn:	localStorage.getItem("fpfDoubleColumn"),
-	highlightLast:	localStorage.getItem("fpfHighlightLast"),
-	ignoredUsers: JSON.parse(localStorage.getItem("fpfignoredUsers"))	};
-
-
+var settings = JSON.parse(localStorage.getItem("fpfSettings"));
+settings.ignoredUsers = JSON.parse(settings.ignoredUsers);
 var currentPage = window.location.href.replace("www.", "");
 var html;
 
@@ -42,19 +42,20 @@ $.ajax({
 });
 
 function fpfToggle(toToggle){
-	x = localStorage.getItem(toToggle);
-	if (x  === "true"){
-		temphtml = $("#"+toToggle).html();
+	temphtml = $("#fpf"+toToggle).html();
+
+	if (settings[toToggle]  === "true"){
 		temphtml = temphtml.replace("true", "false");
-		$("#"+toToggle).html(temphtml);
-		$("#"+toToggle).css("background-color", "rgb(246, 201, 204)");
-		localStorage.setItem(toToggle, "false");	}
-	else if (x  === "false"){
-		temphtml = $("#"+toToggle).html();
+		$("#fpf"+toToggle).css("background-color", "rgba(246, 201, 204, 0.5)");
+		settings[toToggle] = "false";	}
+	else if (settings[toToggle]  === "false"){
 		temphtml = temphtml.replace("false", "true");
-		$("#"+toToggle).html(temphtml);
-		localStorage.setItem(toToggle, "true");
-		$("#"+toToggle).css("background-color", "rgb(110, 255, 122)");	}
+		$("#fpf"+toToggle).css("background-color", "rgba(110, 255, 122, 0.5)");
+		settings[toToggle] = "true";	}
+
+	$("#fpf"+toToggle).html(temphtml);
+	settings.ignoredUsers = JSON.stringify(settings.ignoredUsers);	//this must be done to preserve proper JSON formatting
+	localStorage.setItem("fpfSettings", JSON.stringify(settings));
 }
 
 
@@ -62,34 +63,34 @@ $("#navbarlinks").append("<span id='fpfOptions' class='navbarlink fakeClick' sty
 $("#fpfOptions").click(function(){
 	CreateFloatingDiv(MouseX, MouseY, "fpfOptionsMenu", "urlBox");
 	fpfOptionsMenu.innerHTML = html;	//holy fuck i know this is ugly
-	$("#fpfNavbar").append(settings.navbar);
-		$("#fpfNavbar").click(function(){ fpfToggle("fpfNavbar"); });
-	$("#fpfLogo").append(settings.logo);
-		$("#fpfLogo").click(function(){ fpfToggle("fpfLogo"); });
-	$("#fpfLogoutButton").append(settings.logoutButton);
-		$("#fpfLogoutButton").click(function(){ fpfToggle("fpfLogoutButton"); });
-	$("#fpfNotablePosts").append(settings.notablePosts);
-		$("#fpfNotablePosts").click(function(){ fpfToggle("fpfNotablePosts"); });
-	$("#fpfIgnoreLink").append(settings.ignoreLink);
-		$("#fpfIgnoreLink").click(function(){ fpfToggle("fpfIgnoreLink"); });
-	$("#fpfThreadTitleHighlight").append(settings.threadTitleHighlight);
-		$("#fpfThreadTitleHighlight").click(function(){ fpfToggle("fpfThreadTitleHighlight"); });
-	$("#fpfEnhancedIgnore").append(settings.enhancedIgnore);
-		$("#fpfEnhancedIgnore").click(function(){ fpfToggle("fpfEnhancedIgnore"); });
-	$("#fpfResizeUserTitles").append(settings.resizeUserTitles);
-		$("#fpfResizeUserTitles").click(function(){ fpfToggle("fpfResizeUserTitles"); });
+	$("#fpfnavbar").append(settings.navbar);
+		$("#fpfnavbar").click(function(){ fpfToggle("navbar"); });
+	$("#fpflogo").append(settings.logo);
+		$("#fpflogo").click(function(){ fpfToggle("logo"); });
+	$("#fpflogoutButton").append(settings.logoutButton);
+		$("#fpflogoutButton").click(function(){ fpfToggle("logoutButton"); });
+	$("#fpfnotablePosts").append(settings.notablePosts);
+		$("#fpfnotablePosts").click(function(){ fpfToggle("notablePosts"); });
+	$("#fpfignoreLink").append(settings.ignoreLink);
+		$("#fpfignoreLink").click(function(){ fpfToggle("ignoreLink"); });
+	$("#fpfthreadTitleHighlight").append(settings.threadTitleHighlight);
+		$("#fpfthreadTitleHighlight").click(function(){ fpfToggle("threadTitleHighlight"); });
+	$("#fpfenhancedIgnore").append(settings.enhancedIgnore);
+		$("#fpfenhancedIgnore").click(function(){ fpfToggle("enhancedIgnore"); });
+	$("#fpfresizeUserTitles").append(settings.resizeUserTitles);
+		$("#fpfresizeUserTitles").click(function(){ fpfToggle("resizeUserTitles"); });
 //	$("#fpfProfileMessageDeleted").append(localStorage.getItem("fpfProfileMessageDeleted"));
 //		$("#fpfProfileMessageDeleted").click(function(){ fpfToggle("fpfProfileMessageDeleted"); });
-	$("#fpfDoubleColumn").append(settings.doubleColumn);
-		$("#fpfDoubleColumn").click(function(){ fpfToggle("fpfDoubleColumn"); });
-	$("#fpfHighlightLast").append(settings.highlightLast);
-		$("#fpfHighlightLast").click(function(){ fpfToggle("fpfHighlightLast"); });
+	$("#fpfdoubleColumn").append(settings.doubleColumn);
+		$("#fpfdoubleColumn").click(function(){ fpfToggle("doubleColumn"); });
+	$("#fpfhighlightLast").append(settings.highlightLast);
+		$("#fpfhighlightLast").click(function(){ fpfToggle("highlightLast"); });
 /*	for (i=0; i<settings.length; i++){		//i have no clue why this doesn't work
 		 = settings[i];
 		$("#"+fpf).append(localStorage.getItem(fpf));
 		$("#"+fpf).click(function(){ toggle(fpf); });	}	*/
-	$("#fpfUpdateIgnored").css("background-color", "rgba(0, 205, 255, 0.5)");
-		$("#fpfUpdateIgnored").click(function(){ window.location.href ="/profile.php?do=ignorelist"; });
+	$("#fpfupdateIgnored").css("background-color", "rgba(0, 205, 255, 0.5)");
+		$("#fpfupdateIgnored").click(function(){ window.location.href ="/profile.php?do=ignorelist"; });
 	$("#fpfOptionsMenu").children(":contains('true')").css("background-color", "rgba(110, 255, 112, 0.5");
 	$("#fpfOptionsMenu").children(":contains('false')").css("background-color", "rgba(246, 201, 204, 0.5");
 	$("#fpfOptionsMenu").children(".fakeLink").hover(function(){	$(this).fadeTo(0, 0.5);	},	function(){	$(this).fadeTo(0, 1.0);	});
@@ -173,9 +174,10 @@ else if ( (currentPage.indexOf("forum.php") >= 0 || currentPage == ("https://fac
     $(".last_post_column").css("min-width", "200px");	}
 
 else if (currentPage.indexOf("profile.php?do=ignorelist") >= 0 && settings.enhancedIgnore === "true"){
-	ignoredList = [];
-	$("#ignorelist").children("li").children("a").each(function(){ ignoredList.push($(this).text()); });
-	localStorage.setItem("fpfignoredUsers", JSON.stringify(ignoredList));
+	ignoreList = [];
+	$("#ignorelist").children("li").children("a").each(function(){ ignoreList.push($(this).text()); });
+	settings.ignoredUsers = JSON.stringify(ignoreList);
+	localStorage.setItem("fpfSettings", JSON.stringify(settings));
 	alert("FP Fixer ignore list updated");	}
 
 else if ( (currentPage.indexOf("forumdisplay.php") >=0 || currentPage.indexOf("fp_popular.php") >=0 || currentPage.indexOf("fp_read.php") >= 0) && settings.enhancedIgnore === "true"){
