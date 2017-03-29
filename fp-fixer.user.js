@@ -24,6 +24,7 @@ if (!localStorage.fpfSettings){
 		resizeUserTitles: "true",
 		doubleColumn: "true",
 		highlightLast: "true",
+		arrowkeys: "true",
 		ignoredUsers: '["AEGDanuta"]'	};	//this is the easiest way to prevent a JSON parsing error. user AEGDanuta is a spambot, not a legitimate user
 	localStorage.setItem("fpfSettings", JSON.stringify(settings));
 	alert("Facepunch Fixer initialized. Be sure to adjust the settings in the new navbar link");
@@ -33,6 +34,7 @@ var settings = JSON.parse(localStorage.getItem("fpfSettings"));
 settings.ignoredUsers = JSON.parse(settings.ignoredUsers);
 var currentPage = window.location.href.replace("www.", "");
 var html, runOnce = false;
+
 
 $.ajax({
 	url: 'https://rawgit.com/lordhomogay/FP-Fixer/feature-test/options.html',
@@ -86,6 +88,8 @@ $("#fpfOptions").click(function(){
 		$("#fpfdoubleColumn").click(function(){ fpfToggle("doubleColumn"); });
 	$("#fpfhighlightLast").append(settings.highlightLast);
 		$("#fpfhighlightLast").click(function(){ fpfToggle("highlightLast"); });
+	$("#fpfarrowkeys").append(settings.arrowkeys);
+		$("#fpfarrowkeys").click(function(){ fpfToggle("arrowkeys"); });
 /*	for (i=0; i<settings.length; i++){		//i have no clue why this doesn't work
 		 = settings[i];
 		$("#"+fpf).append(localStorage.getItem(fpf));
@@ -159,6 +163,33 @@ if (currentPage.indexOf("showthread.php") >= 0){
 			var fontTags = userTitles[i].getElementsByTagName("font");
 			for (var j = 0; j < fontTags.length; j++)
 				fontTags[j].setAttribute("size", 1);	}
+	}
+
+	if (currentPage.indexOf("&page=") >= 0){
+		x = currentPage.slice(-4);
+		x = x.replace(/\D/g, '');
+		x = parseInt(x);
+		
+		$(document).keydown(function(event) {
+			switch(event.which){
+				case 37:	//left arrow key
+					currentPage = currentPage.replace(("&page="+x), "");
+					x -= 1;
+					window.location.href = currentPage+"&page="+x;
+					break;
+				case 39:	//right arrow key
+					currentPage = currentPage.replace(("&page="+x), "");
+					x += 1;
+					window.location.href = currentPage+"&page="+x;
+					break;
+				default: return;	}
+			event.preventDefault();
+		});
+	}
+	else{
+		$(document).keydown(function(event){
+			if (event.which === 39)
+				window.location.href=currentPage+"&page=2";	});
 	}
 }
 
