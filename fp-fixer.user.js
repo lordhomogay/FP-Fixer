@@ -35,7 +35,7 @@ var currentPage = window.location.href.replace("www.", "");
 var html, runOnce = false;
 
 $.ajax({
-	url: 'https://rawgit.com/lordhomogay/FP-Fixer/feature-test/options.html',
+	url: 'https://cdn.rawgit.com/lordhomogay/FP-Fixer/a1f0eafd/options.html',
 	cache: false,
 	success: function(data) {
 		html = data;	}
